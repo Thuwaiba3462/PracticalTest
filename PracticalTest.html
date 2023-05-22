@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Assistance Tracker</title>
+</head>
+<body>
+  <form id="assistanceForm">
+    <label for="entryInput">Enter Assistance Entry:</label>
+    <input type="text" id="entryInput" placeholder="Directory ID, Description, Duration"><br><br>
+    <button type="button" onclick="addEntry()">Add Entry</button><br><br>
+    <button type="button" onclick="summary()">Summary</button>
+  </form>
+
+  <div>
+    <h2>Entries:</h2>
+    <ul id="entryList"></ul>
+  </div>
+
+  <div>
+    <h2>Summary:</h2>
+    <p id="summaryText"></p>
+  </div>
+
+  <script>
+    var entries = []; 
+
+    function addEntry() {
+      var entryInput = document.getElementById("entryInput").value.trim();
+      
+      if (entryInput === "") {
+        alert("Invalid entry");
+        return;
+      }
+      
+      var entryValues = entryInput.split(",");
+
+      if (entryValues.length !== 3) {
+        alert("Invalid entry");
+        return;
+      }
+
+      var directoryId = entryValues[0].trim();
+      var description = entryValues[1].trim();
+      var duration = entryValues[2].trim();
+
+      var entry = {
+        directoryId: directoryId,
+        description: description,
+        duration: duration
+      };
+
+      entries.push(entry);
+
+      var entryList = document.getElementById("entryList");
+      var listItem = document.createElement("li");
+      listItem.textContent = entryInput;
+      entryList.appendChild(listItem);
+
+      document.getElementById("entryInput").value = "";
+    }
+
+    function summary() {
+      var summaryText = "Number of entries: " + entries.length + "<br>";
+
+      entries.sort(function(a, b) {
+        return parseInt(a.duration) - parseInt(b.duration);
+      });
+
+      for (var i = 0; i < entries.length; i++) {
+        var entry = entries[i];
+        summaryText += entry.directoryId + " " + entry.description + " " + entry.duration + "<br>";
+      }
+
+      document.getElementById("summaryText").innerHTML = summaryText;
+    }
+  </script>
+</body>
+</html>
